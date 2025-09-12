@@ -18,17 +18,14 @@ class EmergencyFragment : Fragment() {
     ): View? {
         val v = inflater.inflate(R.layout.fragment_emergency, container, false)
 
-        // Police button
         v.findViewById<View>(R.id.btnPolice).setOnClickListener {
             dial("100") // police emergency number
         }
 
-        // Ambulance button
         v.findViewById<View>(R.id.btnAmbulance).setOnClickListener {
             dial("102") // ambulance emergency number
         }
 
-        // Fire button
         v.findViewById<View>(R.id.btnFire).setOnClickListener {
             dial("101") // fire emergency number
         }

@@ -1,16 +1,13 @@
 package com.example.dizaal_disasteralerts.ui
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.dizaal_disasteralerts.R
 import com.example.dizaal_disasteralerts.databinding.ActivityMainBinding
-import com.example.dizaal_disasteralerts.ui.emergency.EmergencyFragment
-import com.example.dizaal_disasteralerts.ui.home.HomeFragment
-import com.example.dizaal_disasteralerts.ui.map.MapFragment
-import com.example.dizaal_disasteralerts.ui.profile.ProfileFragment
-import com.example.dizaal_disasteralerts.ui.settings.SettingsFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,32 +16,39 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         adapter = ViewPagerAdapter(this)
         binding.viewPager.adapter = adapter
-
-
         binding.viewPager.isUserInputEnabled = true
 
-
         binding.bottomNav.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> binding.viewPager.currentItem = 0
-                R.id.nav_map -> binding.viewPager.currentItem = 1
-                R.id.nav_emergency -> binding.viewPager.currentItem = 2
-                //R.id.nav_settings -> binding.viewPager.currentItem = 3
-                R.id.nav_profile -> binding.viewPager.currentItem = 4
+            binding.viewPager.currentItem = when (item.itemId) {
+                R.id.nav_home -> 0
+                R.id.nav_map -> 1
+                R.id.nav_emergency -> 2
+                R.id.nav_settings -> 3
+                R.id.nav_profile -> 4
+                else -> 0
             }
             true
         }
 
-
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                binding.bottomNav.menu.getItem(position).isChecked = true
+                if (position < binding.bottomNav.menu.size()) {
+                    binding.bottomNav.menu.getItem(position).isChecked = true
+                }
             }
         })
     }

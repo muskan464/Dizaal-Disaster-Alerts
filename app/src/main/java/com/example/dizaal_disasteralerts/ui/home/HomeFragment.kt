@@ -35,19 +35,28 @@ class HomeFragment : Fragment() {
         binding.rvAlerts.layoutManager = LinearLayoutManager(requireContext())
         binding.rvAlerts.adapter = adapter
 
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val q = s?.toString()?.trim()?.lowercase() ?: ""
-                val filtered = allItems.filter {
-                    it.title.lowercase().contains(q) ||
-                            it.subtitle.lowercase().contains(q)
-                }
-                adapter.submit(filtered)
+        binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                filterList(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
             }
         })
     }
+
+    private fun filterList(query: String?) {
+        val q = query?.trim()?.lowercase() ?: ""
+        val filtered = allItems.filter {
+            it.title.lowercase().contains(q) ||
+                    it.subtitle.lowercase().contains(q)
+        }
+        adapter.submit(filtered)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

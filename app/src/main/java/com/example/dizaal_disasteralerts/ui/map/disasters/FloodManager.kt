@@ -13,7 +13,7 @@ class FloodManager(private val map: GoogleMap) {
     enum class RiskLevel { LOW, MODERATE, HIGH }
 
     fun showFlood(lat: Double, lon: Double, discharge: Double, maxDischarge: Double) {
-        clearFloodPolygons()
+        // ✅ REMOVED clearFloodPolygons() from here
         createFloodZone(lat, lon, discharge)
         if (maxDischarge > discharge * 1.5) {
             createFloodZone(lat + 0.005, lon + 0.005, maxDischarge)
@@ -107,11 +107,11 @@ class FloodManager(private val map: GoogleMap) {
             .title("Flood Alert")
             .snippet("Risk: $riskLevel\nDischarge: $discharge m³/s")
             .icon(
-                com.google.android.gms.maps.model.BitmapDescriptorFactory.defaultMarker(
+                BitmapDescriptorFactory.defaultMarker(
                     when {
-                        riskLevel.contains("High") -> com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_RED
-                        riskLevel.contains("Moderate") -> com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_ORANGE
-                        else -> com.google.android.gms.maps.model.BitmapDescriptorFactory.HUE_BLUE
+                        riskLevel.contains("High") -> BitmapDescriptorFactory.HUE_RED
+                        riskLevel.contains("Moderate") -> BitmapDescriptorFactory.HUE_ORANGE
+                        else -> BitmapDescriptorFactory.HUE_BLUE
                     }
                 )
             )

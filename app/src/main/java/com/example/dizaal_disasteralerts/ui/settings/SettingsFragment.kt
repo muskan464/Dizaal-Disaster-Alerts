@@ -10,14 +10,31 @@ import com.example.dizaal_disasteralerts.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    private lateinit var darkModeSwitch: SwitchMaterial
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return inflater.inflate(R.layout.fragment_settings, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sw = view.findViewById<SwitchMaterial>(R.id.switchDark)
-        sw.setOnCheckedChangeListener { _, isChecked ->
+        super.onViewCreated(view, savedInstanceState)
+
+        darkModeSwitch = view.findViewById(R.id.switchDark)
+
+        // Restore saved preference
+        val isDarkMode = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+        darkModeSwitch.isChecked = isDarkMode
+
+        // Listen for changes
+        darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
             AppCompatDelegate.setDefaultNightMode(
-                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
             )
         }
     }

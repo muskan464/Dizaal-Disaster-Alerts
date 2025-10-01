@@ -11,7 +11,12 @@ data class FloodResponse(
     val timezone_abbreviation: String?,
     @SerializedName("daily_units")
     val dailyUnits: DailyUnits?,
-    val daily: Daily?
+    val daily: Daily?,
+    // Friendly fields for UI (mutable, optional)
+    var riskLevel: String? = null,
+    var severity: String? = null,
+    var area: String? = null,
+    var message: String? = null
 )
 
 data class DailyUnits(

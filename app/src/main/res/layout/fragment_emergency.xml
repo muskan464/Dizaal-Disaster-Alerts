@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Title -->
         <TextView
             android:id="@+id/titleEmergency"
             android:text="@string/title_emergency"
@@ -19,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-
+        <!-- Emergency Buttons -->
         <LinearLayout
             android:layout_marginTop="12dp"
             android:gravity="center"
@@ -95,7 +96,7 @@
             </LinearLayout>
         </LinearLayout>
 
-
+        <!-- Personal Emergency Contacts -->
         <TextView
             android:text="Personal Emergency Contacts"
             android:textStyle="bold"
@@ -126,7 +127,30 @@
                 android:layout_height="wrap_content"/>
         </LinearLayout>
 
+        <!-- Disaster Types Horizontal Scroll -->
+        <TextView
+            android:text="Disasters"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/text_primary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:id="@+id/layoutDisasters"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </HorizontalScrollView>
+
+        <!-- Safety Tips Section -->
         <TextView
             android:text="Safety Tips"
             android:textStyle="bold"
@@ -136,71 +160,13 @@
             android:layout_height="wrap_content"/>
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:text="Earthquakes"
-                android:background="@drawable/bg_chip"
-                android:padding="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="Floods"
-                android:background="@drawable/bg_chip"
-                android:padding="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="Storms"
-                android:background="@drawable/bg_chip"
-                android:padding="10dp"
-                android:layout_marginEnd="8dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="Fires"
-                android:background="@drawable/bg_chip"
-                android:padding="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <LinearLayout
+            android:id="@+id/layoutSafetyTips"
             android:background="@drawable/bg_card"
             android:padding="12dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:text="• Drop, Cover, and Hold On"
-                android:textColor="@color/text_primary"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="• Stay indoors until shaking stops"
-                android:textColor="@color/text_primary"
-                android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:text="• Check for injuries and damages"
-                android:textColor="@color/text_primary"
-                android:layout_marginTop="4dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 </ScrollView>

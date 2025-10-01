@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "506952207965",
+    "project_id": "dizaal-disaster-alerts",
+    "storage_bucket": "dizaal-disaster-alerts.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506952207965:android:4568fdb7d28c4a573fc7b4",
+        "android_client_info": {
+          "package_name": "com.example.dizaal_disasteralerts"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeK_vp2KrQnL7wZiBzsF1EHAq_zm7ANqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:506952207965:android:12633f2cf76b545b3fc7b4",
+        "android_client_info": {
+          "package_name": "com.example.searchingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeK_vp2KrQnL7wZiBzsF1EHAq_zm7ANqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -50,12 +50,10 @@ class AlertDetailsFragment : Fragment() {
             val tvInstructions = view.findViewById<TextView>(R.id.tvInstructions)
             val tvShelterInfo = view.findViewById<TextView>(R.id.tvShelterInfo)
 
-            // Bind values
             tvTitle.text = item.title ?: "Disaster Alert"
             tvSeverity.text = "Severity: ${item.severity.name}"
             tvRiskType.text = "Risk: ${item.subtitle ?: "N/A"}"
 
-            // Risk Type color
             val riskLower = (item.subtitle ?: "").lowercase()
             val riskColor = when {
                 "severe" in riskLower || "extreme" in riskLower -> android.R.color.holo_red_dark
@@ -67,7 +65,6 @@ class AlertDetailsFragment : Fragment() {
             }
             tvRiskType.setTextColor(resources.getColor(riskColor, requireActivity().theme))
 
-            // Location → city name if coordinates available
             tvLocation.text = if (item.latitude != null && item.longitude != null) {
                 "Location: ${getCityNameFromCoordinates(requireContext(), item.latitude, item.longitude)}"
             } else {
@@ -81,7 +78,6 @@ class AlertDetailsFragment : Fragment() {
             tvInstructions.text = item.instructions ?: "No advisory available."
             tvShelterInfo.text = item.shelterInfo ?: "Not specified"
 
-            // Copy Info
             view.findViewById<MaterialButton>(R.id.btnCopyInfo).setOnClickListener {
                 val clipboard = requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val allText = buildString {

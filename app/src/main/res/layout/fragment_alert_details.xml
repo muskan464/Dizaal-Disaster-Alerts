@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Top App Bar -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -15,7 +14,6 @@
         app:titleTextColor="@color/text_primary"
         app:navigationIcon="@drawable/outline_arrow_left_alt_24"/>
 
-    <!-- Scrollable Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,7 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Disaster Type & Title -->
             <TextView
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
@@ -37,7 +34,6 @@
                 android:textSize="20sp"
                 android:textStyle="bold"/>
 
-            <!-- Alert Card -->
             <LinearLayout
                 android:background="@drawable/bg_card"
                 android:padding="12dp"
@@ -46,7 +42,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <!-- Severity -->
                 <TextView
                     android:id="@+id/tvSeverity"
                     android:layout_width="match_parent"
@@ -55,7 +50,6 @@
                     android:textStyle="bold"
                     android:textColor="@android:color/holo_red_light"/>
 
-                <!-- Risk Type -->
                 <TextView
                     android:id="@+id/tvRiskType"
                     android:layout_width="match_parent"
@@ -65,7 +59,6 @@
                     android:textColor="@android:color/holo_orange_dark"
                     android:layout_marginTop="4dp"/>
 
-                <!-- Location(s) Affected -->
                 <TextView
                     android:id="@+id/tvLocation"
                     android:layout_width="match_parent"
@@ -73,7 +66,6 @@
                     android:text="Location: Coastal Districts"
                     android:layout_marginTop="6dp"/>
 
-                <!-- Issued Time -->
                 <TextView
                     android:id="@+id/tvIssuedTime"
                     android:layout_width="match_parent"
@@ -81,7 +73,6 @@
                     android:text="Issued: 12:00 PM, 30 Sep"
                     android:layout_marginTop="6dp"/>
 
-                <!-- Expected Start / End -->
                 <TextView
                     android:id="@+id/tvExpectedTime"
                     android:layout_width="match_parent"
@@ -90,7 +81,6 @@
                     android:layout_marginTop="6dp"/>
             </LinearLayout>
 
-            <!-- Description -->
             <TextView
                 android:text="Description"
                 android:textStyle="bold"
@@ -105,7 +95,6 @@
                 android:text="A severe cyclone is expected to make landfall..."
                 android:layout_marginTop="6dp"/>
 
-            <!-- Authority -->
             <TextView
                 android:text="Authority / Source"
                 android:textStyle="bold"
@@ -120,7 +109,6 @@
                 android:text="Meteorological Department"
                 android:layout_marginTop="6dp"/>
 
-            <!-- Instructions -->
             <TextView
                 android:text="Instructions / Advisory"
                 android:textStyle="bold"
@@ -135,7 +123,6 @@
                 android:text="Stay indoors, avoid coastal areas."
                 android:layout_marginTop="6dp"/>
 
-            <!-- Shelter Info -->
             <TextView
                 android:text="Shelter Information"
                 android:textStyle="bold"
@@ -150,7 +137,6 @@
                 android:text="Nearest relief camp: Govt. School, XYZ Nagar"
                 android:layout_marginTop="6dp"/>
 
-            <!-- Quick Actions -->
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"

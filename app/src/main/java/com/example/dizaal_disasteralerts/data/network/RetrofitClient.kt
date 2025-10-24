@@ -9,10 +9,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    // Flood API (existing)
     private const val FLOOD_BASE_URL = "https://flood-api.open-meteo.com/"
 
-    // USGS Earthquake API
     private const val USGS_BASE_URL = "https://earthquake.usgs.gov/"
 
     private val gson = GsonBuilder().create()
@@ -25,7 +23,6 @@ object RetrofitClient {
         readTimeout(30, TimeUnit.SECONDS)
     }.build()
 
-    // Flood retrofit (existing)
     val floodRetrofit: Retrofit = Retrofit.Builder()
         .baseUrl(FLOOD_BASE_URL)
         .client(okHttp)
@@ -35,7 +32,6 @@ object RetrofitClient {
     val floodApiService: com.example.dizaal_disasteralerts.data.network.FloodApiService =
         floodRetrofit.create(com.example.dizaal_disasteralerts.data.network.FloodApiService::class.java)
 
-    // USGS retrofit (new)
     private val usgsRetrofit: Retrofit = Retrofit.Builder()
         .baseUrl(USGS_BASE_URL)
         .client(okHttp)

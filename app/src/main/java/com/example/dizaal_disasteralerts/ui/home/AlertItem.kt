@@ -8,9 +8,8 @@ data class AlertItem(
     val subtitle: String,
     val time: String,
     val severity: Severity,
-    val payload: String? = null, // optional raw data (if needed)
+    val payload: String? = null,
 
-    // 🔹 New structured fields
     val location: String? = null,
     val issuedTime: String? = null,
     val expectedTime: String? = null,

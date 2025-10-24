@@ -1,82 +1,96 @@
 package com.example.dizaal_disasteralerts.ui.map.disasters
 
 import android.graphics.Color
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.*
 import com.example.dizaal_disasteralerts.data.model.Earthquake
-import kotlin.math.max
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.maps.android.heatmaps.Gradient
+import com.google.maps.android.heatmaps.HeatmapTileProvider
+import com.google.maps.android.heatmaps.WeightedLatLng
+import com.google.android.gms.maps.model.TileOverlay
+import com.google.android.gms.maps.model.TileOverlayOptions
 
 class EarthquakeManager(private val map: GoogleMap) {
 
-    private val markers = mutableListOf<Marker>()
-    private val circles = mutableListOf<Circle>()
+    private var heatmapOverlay: TileOverlay? = null
+    private val earthquakeMarkers = mutableListOf<Marker>()
 
     fun showEarthquakes(list: List<Earthquake>) {
         clearEarthquakes()
-        list.forEach { showEarthquake(it) }
+        if (list.isEmpty()) return
+
+        // Convert earthquakes to WeightedLatLng points
+        val weightedPoints = list.mapNotNull { eq ->
+            val lat = eq.latitude ?: return@mapNotNull null
+            val lon = eq.longitude ?: return@mapNotNull null
+            val mag = eq.magnitude ?: 1.0
+
+            WeightedLatLng(LatLng(lat, lon), mag.toFloat().toDouble())
+        }
+
+        if (weightedPoints.isEmpty()) return
+
+        try {
+            // green (low) → yellow → orange → red (high)
+            val colors = intArrayOf(
+                Color.argb(120, 0, 255, 0),    // green = low intensity
+                Color.argb(140, 255, 215, 0),  // yellow
+                Color.argb(160, 255, 165, 0),  // orange
+                Color.argb(180, 255, 0, 0)     // red = high intensity
+            )
+            val startPoints = floatArrayOf(0.0f, 0.3f, 0.6f, 1.0f)
+            val gradient = Gradient(colors, startPoints)
+
+
+            val provider = HeatmapTileProvider.Builder()
+                .weightedData(weightedPoints)
+                .gradient(gradient)
+                .radius(50)
+                .opacity(0.6)
+                .build()
+
+            heatmapOverlay = map.addTileOverlay(TileOverlayOptions().tileProvider(provider))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        val seenLocations = mutableSetOf<Pair<Double, Double>>()
+        list.forEach { eq ->
+            val lat = eq.latitude ?: return@forEach
+            val lon = eq.longitude ?: return@forEach
+            val key = Pair("%.3f".format(lat).toDouble(), "%.3f".format(lon).toDouble())
+            if (!seenLocations.contains(key)) {
+                seenLocations.add(key)
+                addMarker(eq)
+            }
+        }
     }
 
-    fun showEarthquake(eq: Earthquake) {
+    private fun addMarker(eq: Earthquake) {
         val lat = eq.latitude ?: return
         val lon = eq.longitude ?: return
         val mag = eq.magnitude ?: 0.0
+        val depth = eq.depthKm ?: 0.0
 
-        val title = "M${"%.1f".format(mag)} • ${eq.place ?: "Unknown"}"
-        val snippet = buildString {
-            eq.depthKm?.let { append("Depth: ${"%.1f".format(it)} km\n") }
-            eq.time?.let { append("Time: ${java.util.Date(it)}") }
-        }
-        val markerOptions = MarkerOptions()
-            .position(LatLng(lat, lon))
-            .title(title)
-            .snippet(snippet)
-            .zIndex(10f)
-            .icon(BitmapDescriptorFactory.defaultMarker(getMarkerHueForMagnitude(mag)))
-        map.addMarker(markerOptions)?.let { markers.add(it) }
-
-        val baseRadius = 2000.0
-        val radiusMeters = max(500.0, baseRadius * Math.pow(10.0, (mag / 1.5)))
-        val circleOptions = CircleOptions()
-            .center(LatLng(lat, lon))
-            .radius(radiusMeters)
-            .strokeWidth(2f)
-            .strokeColor(getStrokeColorForMagnitude(mag))
-            .fillColor(getFillColorForMagnitude(mag))
-            .zIndex(1f)
-        map.addCircle(circleOptions)?.let { circles.add(it) }
-    }
-
-    private fun getMarkerHueForMagnitude(mag: Double): Float {
-        return when {
-            mag >= 6.0 -> BitmapDescriptorFactory.HUE_RED
-            mag >= 5.0 -> BitmapDescriptorFactory.HUE_ORANGE
-            mag >= 4.0 -> BitmapDescriptorFactory.HUE_YELLOW
-            else -> BitmapDescriptorFactory.HUE_AZURE
-        }
-    }
-
-    private fun getFillColorForMagnitude(mag: Double): Int {
-        return when {
-            mag >= 6.0 -> Color.argb(80, 200, 0, 0)
-            mag >= 5.0 -> Color.argb(70, 255, 140, 0)
-            mag >= 4.0 -> Color.argb(60, 255, 200, 0)
-            else -> Color.argb(40, 0, 120, 255)
-        }
-    }
-
-    private fun getStrokeColorForMagnitude(mag: Double): Int {
-        return when {
-            mag >= 6.0 -> Color.argb(200, 180, 0, 0)
-            mag >= 5.0 -> Color.argb(180, 200, 120, 0)
-            mag >= 4.0 -> Color.argb(160, 200, 160, 0)
-            else -> Color.argb(120, 0, 80, 200)
-        }
+        val marker = map.addMarker(
+            MarkerOptions()
+                .position(LatLng(lat, lon))
+                .title("Earthquake Alert")
+                .snippet("Magnitude: %.1f\nDepth: %.1f km".format(mag, depth))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                .zIndex(10f)
+        )
+        marker?.let { earthquakeMarkers.add(it) }
     }
 
     fun clearEarthquakes() {
-        markers.forEach { it.remove() }
-        circles.forEach { it.remove() }
-        markers.clear()
-        circles.clear()
+        heatmapOverlay?.remove()
+        heatmapOverlay = null
+
+        earthquakeMarkers.forEach { it.remove() }
+        earthquakeMarkers.clear()
     }
 }

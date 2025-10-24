@@ -1,9 +1,7 @@
-// file: data/model/EarthquakeResponse.kt
 package com.example.dizaal_disasteralerts.data.model
 
 import com.google.gson.annotations.SerializedName
 
-// Top-level feature collection from USGS
 data class FeatureCollection(
     val type: String?,
     val metadata: Metadata?,
@@ -29,7 +27,7 @@ data class Feature(
 data class Properties(
     @SerializedName("mag") val mag: Double?,
     val place: String?,
-    val time: Long?,          // epoch ms (UTC)
+    val time: Long?,
     val updated: Long?,
     val tz: Int?,
     val url: String?,
@@ -48,10 +46,9 @@ data class Properties(
 
 data class Geometry(
     val type: String?,
-    val coordinates: List<Double>? // [longitude, latitude, depth(km)]
+    val coordinates: List<Double>?
 )
 
-// simplified DTO for app use (map / Firebase / notifications)
 data class Earthquake(
     val id: String,
     val magnitude: Double?,
@@ -62,7 +59,6 @@ data class Earthquake(
     val depthKm: Double?
 )
 
-// helper mapper
 fun FeatureCollection?.toEarthquakes(): List<Earthquake> {
     if (this?.features == null) return emptyList()
     return this.features.mapNotNull { f ->

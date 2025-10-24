@@ -115,7 +115,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupObservers() {
-        // 🔹 Flood data (list-based)
         floodViewModel.floodDataSingle.observe(viewLifecycleOwner) { data ->
             data?.let { floodResponse ->
                 val lat = floodResponse.latitude ?: return@let
@@ -128,16 +127,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-
-
-
-
-        // 🔹 Earthquake data
         earthquakeViewModel.earthquakeData.observe(viewLifecycleOwner) { data ->
             data?.let { earthquakeManager.showEarthquakes(it) }
         }
 
-        // 🔹 Error handling
         floodViewModel.error.observe(viewLifecycleOwner) { it?.let { showToast(it) } }
         earthquakeViewModel.error.observe(viewLifecycleOwner) { it?.let { showToast(it) } }
     }
@@ -211,10 +204,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     private fun handleLocation(location: Location) {
         val userLatLng = LatLng(location.latitude, location.longitude)
-        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 6f))
 
-        floodViewModel.fetchFloodData(location.latitude, location.longitude)
-        earthquakeViewModel.fetchEarthquakeData(location.latitude, location.longitude)
+        // Animate camera and wait for map to finish rendering
+        map?.setOnCameraIdleListener {
+            map?.setOnCameraIdleListener(null) // Remove listener to prevent repeated calls
+            floodViewModel.fetchFloodData(location.latitude, location.longitude)
+            earthquakeViewModel.fetchEarthquakeData(location.latitude, location.longitude)
+        }
+
+        map?.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 6f))
     }
 
     private fun searchLocation(query: String) {
@@ -227,12 +225,18 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
                 map?.clear()
                 map?.addMarker(MarkerOptions().position(latLng).title(query))
-                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 6f))
 
-                floodViewModel.fetchFloodData(address.latitude, address.longitude)
-                earthquakeViewModel.fetchEarthquakeData(address.latitude, address.longitude)
+                // Set listener BEFORE animating camera to wait for tiles to load
+                map?.setOnCameraIdleListener {
+                    map?.setOnCameraIdleListener(null) // Remove listener to prevent repeated calls
+                    floodViewModel.fetchFloodData(address.latitude, address.longitude)
+                    earthquakeViewModel.fetchEarthquakeData(address.latitude, address.longitude)
+                }
+
+                map?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 6f))
             } else showToast("Location not found")
         } catch (e: Exception) {
+
             showToast("Error: ${e.message}")
         }
     }
